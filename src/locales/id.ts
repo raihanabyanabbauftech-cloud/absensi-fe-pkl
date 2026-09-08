@@ -8,6 +8,7 @@ export const id = {
     cancel: "Batal",
     previous: "Sebelumnya",
     next: "Berikutnya",
+    done: "Selesai",
     login: "Masuk",
     logout: "Keluar",
     darkMode: "Mode Gelap",
@@ -1312,6 +1313,10 @@ export const id = {
     required: "Pilih karyawan dan ambil foto.",
     success: "Referensi wajah berhasil didaftarkan.",
     failed: "Gagal mendaftarkan wajah. Silakan coba lagi.",
+    skip: "Lewati",
+    registerSuccessHint: "Referensi wajah akan didaftarkan setelah Anda klik Daftarkan. Jika kamera tidak tersedia, gunakan tombol unggah gambar.",
+    registeredTitle: "Wajah Terdaftar",
+    registeredDesc: "Karyawan berhasil dibuat dan referensi wajah sudah didaftarkan.",
   },
 
   adminDepartments: {

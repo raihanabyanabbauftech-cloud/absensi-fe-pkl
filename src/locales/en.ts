@@ -8,6 +8,7 @@ export const en = {
     cancel: "Cancel",
     previous: "Previous",
     next: "Next",
+    done: "Done",
     login: "Sign In",
     logout: "Logout",
     darkMode: "Dark Mode",
@@ -1313,6 +1314,10 @@ adminEmployeeForm: {
     required: "Choose an employee and capture a photo.",
     success: "Face reference registered successfully.",
     failed: "Failed to register face. Please try again.",
+    skip: "Skip",
+    registerSuccessHint: "The face reference will be registered after you click Register. If the camera is unavailable, use the upload image button.",
+    registeredTitle: "Face Registered",
+    registeredDesc: "Employee created and face reference registered.",
   },
 
   adminDepartments: {

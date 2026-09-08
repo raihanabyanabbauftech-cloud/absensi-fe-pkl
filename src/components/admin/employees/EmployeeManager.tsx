@@ -20,6 +20,7 @@ import EmployeeHeader from "./EmployeeHeader";
 import EmployeeFilters from "./EmployeeFilters";
 import EmployeesTable from "./EmployeesTable";
 import EmployeeFormModal from "./EmployeeFormModal";
+import EmployeeFaceScanModal from "./EmployeeFaceScanModal";
 import EmployeeDetailModal from "./EmployeeDetailModal";
 import ResignConfirmModal from "./ResignConfirmModal";
 
@@ -38,6 +39,7 @@ export default function EmployeeManager() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [modal, setModal] = useState<ModalState>(null);
   const [values, setValues] = useState<Record<string, string>>({});
+  const [faceScanTarget, setFaceScanTarget] = useState<AdminEmployee | null>(null);
   const [detailRow, setDetailRow] = useState<AdminEmployee | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +122,11 @@ export default function EmployeeManager() {
     setError(null);
   };
 
+  const closeFaceScan = async () => {
+    setFaceScanTarget(null);
+    await load();
+  };
+
   const submit = async () => {
     if (!modal) return;
     setError(null);
@@ -138,7 +145,7 @@ export default function EmployeeManager() {
       }
       setSaving(true);
       try {
-        await createEmployee({
+        const created = await createEmployee({
           name: values.name,
           email: values.email,
           password: values.password || DEFAULT_EMPLOYEE_PASSWORD,
@@ -156,8 +163,9 @@ export default function EmployeeManager() {
           gender: values.gender || null,
           marital_status: values.marital_status || null,
         });
-        closeModal();
-        await load();
+        setModal(null);
+        setValues({});
+        setFaceScanTarget(created);
       } catch (err) {
         setError(err instanceof ApiError ? err.message : t("adminMaster.failed"));
       } finally {
@@ -252,6 +260,15 @@ export default function EmployeeManager() {
           saving={saving}
           onClose={closeModal}
           onSubmit={submit}
+        />
+      )}
+
+      {faceScanTarget && (
+        <EmployeeFaceScanModal
+          employeeId={faceScanTarget.id}
+          employeeName={faceScanTarget.name}
+          onClose={() => closeFaceScan()}
+          onComplete={() => closeFaceScan()}
         />
       )}
 

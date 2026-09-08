@@ -116,7 +116,6 @@ export default function EmployeeFormModal({
                     type="text"
                     value={values.password ?? ""}
                     onChange={(e) => onChange({ password: e.target.value })}
-                    placeholder={t("adminEmployees.total") === "Total Karyawan" ? "Karyawan123" : "Karyawan123"}
                     className={inputClass}
                   />
                 </Field>
