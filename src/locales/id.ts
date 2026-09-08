@@ -988,6 +988,7 @@ export const id = {
     employeeNumber: "Nomor Karyawan",
     email: "Email",
     nik: "NIK",
+    password: "Password Default",
     npwp: "NPWP",
     whatsapp: "WhatsApp",
     no_telp: "No Telepon",

@@ -94,8 +94,41 @@ export default function EmployeeFormModal({
               <SectionTitle icon={<FiKey size={14} />}>
                 {t("adminEmployeeForm.idAccess")}
               </SectionTitle>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Field label={t("adminEmployeeForm.fullName")} required>
+                  <input
+                    type="text"
+                    value={values.name ?? ""}
+                    onChange={(e) => onChange({ name: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.email")} required>
+                  <input
+                    type="email"
+                    value={values.email ?? ""}
+                    onChange={(e) => onChange({ email: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.password")}>
+                  <input
+                    type="text"
+                    value={values.password ?? ""}
+                    onChange={(e) => onChange({ password: e.target.value })}
+                    placeholder={t("adminEmployees.total") === "Total Karyawan" ? "Karyawan123" : "Karyawan123"}
+                    className={inputClass}
+                  />
+                </Field>
+              </div>
+            </section>
+
+            <section>
+              <SectionTitle icon={<FiUser size={14} />}>
+                {t("adminEmployeeForm.personalData")}
+              </SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <Field label={t("adminEmployeeForm.nik")}>
                   <input
                     type="text"
                     value={values.nik ?? ""}
@@ -127,14 +160,6 @@ export default function EmployeeFormModal({
                     className={inputClass}
                   />
                 </Field>
-              </div>
-            </section>
-
-            <section>
-              <SectionTitle icon={<FiUser size={14} />}>
-                {t("adminEmployeeForm.personalData")}
-              </SectionTitle>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <Field label={t("adminEmployeeForm.tempat_lahir")}>
                   <input
                     type="text"
@@ -280,6 +305,7 @@ export default function EmployeeFormModal({
                     <option value="Unknown">{t("adminEmployeeForm.golongan_darah") === "Unknown" ? "Unknown" : "Unknown"}</option>
                   </select>
                 </Field>
+              </div>
             </section>
 
             <section>

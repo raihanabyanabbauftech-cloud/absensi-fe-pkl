@@ -152,7 +152,10 @@ export function createEmployee(body: {
   position_id?: string | null;
   supervisor_id?: string | null;
   join_date?: string | null;
+  nik?: string | null;
+  npwp?: string | null;
   phone?: string | null;
+  no_telp?: string | null;
   address?: string | null;
   birth_date?: string | null;
   gender?: string | null;

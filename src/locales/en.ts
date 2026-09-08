@@ -988,6 +988,7 @@ adminEmployeeForm: {
     employeeNumber: "Employee Number",
     email: "Email",
     nik: "NIK",
+    password: "Default Password",
     npwp: "NPWP",
     whatsapp: "WhatsApp",
     no_telp: "Phone Number",

@@ -95,7 +95,7 @@ export default function EmployeeManager() {
   }, [rows, search, departmentFilter, statusFilter]);
 
   const openCreate = () => {
-    setValues({ contract_status: "kontrak" });
+    setValues({ contract_status: "kontrak", password: DEFAULT_EMPLOYEE_PASSWORD });
     setError(null);
     setModal({ mode: "create" });
   };
@@ -141,13 +141,16 @@ export default function EmployeeManager() {
         await createEmployee({
           name: values.name,
           email: values.email,
-          password: DEFAULT_EMPLOYEE_PASSWORD,
+          password: values.password || DEFAULT_EMPLOYEE_PASSWORD,
           role_id: employeeRole,
           department_id: values.department_id || null,
           position_id: values.position_id || null,
           supervisor_id: values.supervisor_id || null,
           join_date: values.start_contract || null,
+          nik: values.nik || null,
+          npwp: values.npwp || null,
           phone: values.whatsapp || null,
+          no_telp: values.no_telp || null,
           address: values.address || null,
           birth_date: values.birth_date || null,
           gender: values.gender || null,
