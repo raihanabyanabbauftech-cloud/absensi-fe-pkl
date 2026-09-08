@@ -98,24 +98,16 @@ export default function EmployeeFormModal({
                 <Field label={t("adminEmployeeForm.fullName")} required>
                   <input
                     type="text"
-                    value={values.name ?? ""}
-                    onChange={(e) => onChange({ name: e.target.value })}
+                    value={values.nik ?? ""}
+                    onChange={(e) => onChange({ nik: e.target.value })}
                     className={inputClass}
                   />
                 </Field>
-                <Field label={t("adminEmployeeForm.employeeNumber")}>
+                <Field label={t("adminEmployeeForm.npwp")}>
                   <input
                     type="text"
-                    value={values.employee_number ?? ""}
-                    onChange={(e) => onChange({ employee_number: e.target.value })}
-                    className={inputClass}
-                  />
-                </Field>
-                <Field label={t("adminEmployeeForm.email")} required>
-                  <input
-                    type="email"
-                    value={values.email ?? ""}
-                    onChange={(e) => onChange({ email: e.target.value })}
+                    value={values.npwp ?? ""}
+                    onChange={(e) => onChange({ npwp: e.target.value })}
                     className={inputClass}
                   />
                 </Field>
@@ -127,6 +119,14 @@ export default function EmployeeFormModal({
                     className={inputClass}
                   />
                 </Field>
+                <Field label={t("adminEmployeeForm.no_telp")}>
+                  <input
+                    type="tel"
+                    value={values.no_telp ?? ""}
+                    onChange={(e) => onChange({ no_telp: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
               </div>
             </section>
 
@@ -135,6 +135,14 @@ export default function EmployeeFormModal({
                 {t("adminEmployeeForm.personalData")}
               </SectionTitle>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <Field label={t("adminEmployeeForm.tempat_lahir")}>
+                  <input
+                    type="text"
+                    value={values.tempat_lahir ?? ""}
+                    onChange={(e) => onChange({ tempat_lahir: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
                 <Field label={t("adminEmployeeForm.birthDate")}>
                   <input
                     type="date"
@@ -166,18 +174,112 @@ export default function EmployeeFormModal({
                     <option value="divorced">{t("adminEmployeeForm.divorced")}</option>
                   </select>
                 </Field>
-                <div className="md:col-span-2 xl:col-span-1" />
-                <div className="md:col-span-2">
-                  <Field label={t("adminEmployeeForm.address")}>
-                    <input
-                      type="text"
-                      value={values.address ?? ""}
-                      onChange={(e) => onChange({ address: e.target.value })}
-                      className={inputClass}
-                    />
-                  </Field>
-                </div>
-              </div>
+                <Field label={t("adminEmployeeForm.emergency_contact_name")}>
+                  <input
+                    type="text"
+                    value={values.emergency_contact_name ?? ""}
+                    onChange={(e) => onChange({ emergency_contact_name: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.emergency_contact_relation")}>
+                  <select
+                    value={values.emergency_contact_relation ?? ""}
+                    onChange={(e) => onChange({ emergency_contact_relation: e.target.value })}
+                    className={inputClass}
+                  >
+                    <option value="">{t("adminEmployeeForm.selectManager").split(" ").slice(1).join(" ") || "-- Pilih --"}</option>
+                    <option value="Parent">{t("adminEmployeeForm.emergency_contact_relation") === "Parent" ? "Parent" : "Parent"}</option>
+                    <option value="Sibling">{t("adminEmployeeForm.emergency_contact_relation") === "Sibling" ? "Sibling" : "Sibling"}</option>
+                    <option value="Guardian">{t("adminEmployeeForm.emergency_contact_relation") === "Guardian" ? "Guardian" : "Guardian"}</option>
+                    <option value="Spouse">{t("adminEmployeeForm.emergency_contact_relation") === "Spouse" ? "Spouse" : "Spouse"}</option>
+                    <option value="Other">{t("adminEmployeeForm.emergency_contact_relation") === "Other" ? "Other" : "Other"}</option>
+                  </select>
+                </Field>
+                <Field label={t("adminEmployeeForm.emergency_contact_phone")}>
+                  <input
+                    type="tel"
+                    value={values.emergency_contact_phone ?? ""}
+                    onChange={(e) => onChange({ emergency_contact_phone: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.alamat_ktp")}>
+                  <input
+                    type="text"
+                    value={values.alamat_ktp ?? ""}
+                    onChange={(e) => onChange({ alamat_ktp: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.alamat_domisili")}>
+                  <input
+                    type="text"
+                    value={values.alamat_domisili ?? ""}
+                    onChange={(e) => onChange({ alamat_domisili: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.agama")}>
+                  <select
+                    value={values.agama ?? ""}
+                    onChange={(e) => onChange({ agama: e.target.value })}
+                    className={inputClass}
+                  >
+                    <option value="">{t("adminEmployeeForm.selectManager").split(" ").slice(1).join(" ") || "-- Pilih --"}</option>
+                    <option value="Islam">{t("adminEmployeeForm.agama") === "Islam" ? "Islam" : "Islam"}</option>
+                    <option value="Kristen">{t("adminEmployeeForm.agama") === "Kristen" ? "Kristen" : "Kristen"}</option>
+                    <option value="Katolik">{t("adminEmployeeForm.agama") === "Katolik" ? "Katolik" : "Katolik"}</option>
+                    <option value="Hindu">{t("adminEmployeeForm.agama") === "Hindu" ? "Hindu" : "Hindu"}</option>
+                    <option value="Buddha">{t("adminEmployeeForm.agama") === "Buddha" ? "Buddha" : "Buddha"}</option>
+                    <option value="Lain-lain">{t("adminEmployeeForm.agama") === "Lain-lain" ? "Lain-lain" : "Lain-lain"}</option>
+                  </select>
+                </Field>
+                <Field label={t("adminEmployeeForm.pendidikan_terakhir")}>
+                  <select
+                    value={values.pendidikan_terakhir ?? ""}
+                    onChange={(e) => onChange({ pendidikan_terakhir: e.target.value })}
+                    className={inputClass}
+                  >
+                    <option value="">{t("adminEmployeeForm.selectManager").split(" ").slice(1).join(" ") || "-- Pilih --"}</option>
+                    <option value="SD">{t("adminEmployeeForm.pendidikan_terakhir") === "SD" ? "SD" : "SD"}</option>
+                    <option value="SMA">{t("adminEmployeeForm.pendidikan_terakhir") === "SMA" ? "SMA" : "SMA"}</option>
+                    <option value="Diploma">{t("adminEmployeeForm.pendidikan_terakhir") === "Diploma" ? "Diploma" : "Diploma"}</option>
+                    <option value="S1">{t("adminEmployeeForm.pendidikan_terakhir") === "S1" ? "S1" : "S1"}</option>
+                    <option value="S2">{t("adminEmployeeForm.pendidikan_terakhir") === "S2" ? "S2" : "S2"}</option>
+                    <option value="S3">{t("adminEmployeeForm.pendidikan_terakhir") === "S3" ? "S3" : "S3"}</option>
+                  </select>
+                </Field>
+                <Field label={t("adminEmployeeForm.no_rekening")}>
+                  <input
+                    type="text"
+                    value={values.no_rekening ?? ""}
+                    onChange={(e) => onChange({ no_rekening: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.nama_bank")}>
+                  <input
+                    type="text"
+                    value={values.nama_bank ?? ""}
+                    onChange={(e) => onChange({ nama_bank: e.target.value })}
+                    className={inputClass}
+                  />
+                </Field>
+                <Field label={t("adminEmployeeForm.golongan_darah")}>
+                  <select
+                    value={values.golongan_darah ?? ""}
+                    onChange={(e) => onChange({ golongan_darah: e.target.value })}
+                    className={inputClass}
+                  >
+                    <option value="">{t("adminEmployeeForm.selectManager").split(" ").slice(1).join(" ") || "-- Pilih --"}</option>
+                    <option value="A">{t("adminEmployeeForm.golongan_darah") === "A" ? "A" : "A"}</option>
+                    <option value="B">{t("adminEmployeeForm.golongan_darah") === "B" ? "B" : "B"}</option>
+                    <option value="AB">{t("adminEmployeeForm.golongan_darah") === "AB" ? "AB" : "AB"}</option>
+                    <option value="O">{t("adminEmployeeForm.golongan_darah") === "O" ? "O" : "O"}</option>
+                    <option value="Unknown">{t("adminEmployeeForm.golongan_darah") === "Unknown" ? "Unknown" : "Unknown"}</option>
+                  </select>
+                </Field>
             </section>
 
             <section>
