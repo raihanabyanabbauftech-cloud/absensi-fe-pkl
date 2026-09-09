@@ -19,6 +19,9 @@ const ICONS: Record<string, any> = {
   todo: FiCheckSquare,
   leave_approved: FiCheckCircle,
   leave_rejected: FiXCircle,
+  missing_clock_in: FiAlertCircle,
+  missing_clock_out: FiAlertCircle,
+  late_clock_in: FiAlertCircle,
 };
 
 const ICON_STYLES: Record<string, string> = {
@@ -28,6 +31,9 @@ const ICON_STYLES: Record<string, string> = {
   leave_approved:
     "bg-green-50 text-green-600 dark:bg-green-500/20 dark:text-green-400",
   leave_rejected: "bg-red-50 text-red-600 dark:bg-red-500/20 dark:text-red-400",
+  missing_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+  missing_clock_out: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+  late_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
 };
 
 const DEFAULT_ICON_STYLES =

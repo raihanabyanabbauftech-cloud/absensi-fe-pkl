@@ -554,6 +554,9 @@ export const id = {
     errors: {
       generic: "Terjadi kesalahan saat memproses. Silakan coba lagi.",
       outsideRadius: "Lokasi Anda berada di luar radius kantor.",
+      locationNotAssigned: "Lokasi tidak sesuai dengan penempatan Anda.",
+      tooEarly: "Belum waktunya absen.",
+      windowClosed: "Jendela absen sudah tutup.",
       faceMismatch: "Wajah tidak cocok dengan data referensi.",
       noFaceReference: "Referensi wajah belum tersedia. Hubungi admin.",
       noSchedule: "Anda belum memiliki jadwal kerja aktif hari ini.",

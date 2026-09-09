@@ -16,12 +16,15 @@ interface AttendanceResult {
 
 const ERROR_KEY_MAP: Record<string, string> = {
   OUTSIDE_RADIUS: "verificationStepper.errors.outsideRadius",
+  LOCATION_NOT_ASSIGNED: "verificationStepper.errors.locationNotAssigned",
   FACE_MISMATCH: "verificationStepper.errors.faceMismatch",
   FACE_REFERENCE_NOT_FOUND: "verificationStepper.errors.noFaceReference",
   NO_SCHEDULE: "verificationStepper.errors.noSchedule",
   NO_CLOCK_IN: "verificationStepper.errors.noClockIn",
   FACE_IMAGE_REQUIRED: "verificationStepper.errors.captureRequired",
   ALREADY_CLOCKED_IN: "verificationStepper.errors.alreadyClockIn",
+  TOO_EARLY: "verificationStepper.errors.tooEarly",
+  WINDOW_CLOSED: "verificationStepper.errors.windowClosed",
 };
 
 export default function VerificationStepper({ mode = "in", onClose }) {

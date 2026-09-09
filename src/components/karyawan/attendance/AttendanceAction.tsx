@@ -12,7 +12,6 @@ import VerificationStepper from "./VerificationStepper";
 
 const CLOCK_IN_START_HOUR = 9;
 const CLOCK_IN_END_HOUR = 17;
-const CLOCK_OUT_START_HOUR = 17;
 
 interface AttendanceRecord {
   id: string;
@@ -20,14 +19,10 @@ interface AttendanceRecord {
   clock_out_time: string | null;
 }
 
-function isCheckInTime() {
-  const h = new Date().getHours();
-  return h >= CLOCK_IN_START_HOUR && h < CLOCK_IN_END_HOUR;
-}
-
-function isCheckOutTime() {
-  const h = new Date().getHours();
-  return h >= CLOCK_OUT_START_HOUR;
+function hourOf(value?: string | null): number {
+  const p = String(value ?? "").split(":");
+  const n = parseInt(p[0], 10);
+  return Number.isFinite(n) ? n : NaN;
 }
 
 function isToday(isoString: string) {
@@ -79,9 +74,6 @@ export default function AttendanceAction({
   const hasCheckedIn = hasCheckedInProp || !!todayRecord;
   const hasCheckedOut = hasCheckedOutProp || !!todayRecord?.clock_out_time;
 
-  const clockOpen = now.getHours() >= CLOCK_IN_START_HOUR && now.getHours() < CLOCK_IN_END_HOUR;
-  const checkOutOpen = now.getHours() >= CLOCK_OUT_START_HOUR;
-
   const scheduleStart =
     toScheduleTime(schedule?.start_time) ||
     `${String(CLOCK_IN_START_HOUR).padStart(2, "0")}:00`;
@@ -89,20 +81,30 @@ export default function AttendanceAction({
     toScheduleTime(schedule?.end_time) ||
     `${String(CLOCK_IN_END_HOUR).padStart(2, "0")}:00`;
 
+  const startHour = Number.isFinite(hourOf(schedule?.start_time))
+    ? hourOf(schedule?.start_time)
+    : CLOCK_IN_START_HOUR;
+  const endHour = Number.isFinite(hourOf(schedule?.end_time))
+    ? hourOf(schedule?.end_time)
+    : CLOCK_IN_END_HOUR;
+
+  const clockOpen = now.getHours() >= startHour && now.getHours() < endHour;
+  const checkOutOpen = now.getHours() >= startHour;
+
   const handleClick = (type: "in" | "out") => {
     if (type === "out") {
       if (hasCheckedOut) {
         setShowCheckOutDone(true);
         return;
       }
-      if (!isCheckOutTime()) {
+      if (!checkOutOpen) {
         setWarning("out");
         return;
       }
       setMode("out");
       return;
     }
-    if (!isCheckInTime()) {
+    if (!clockOpen) {
       setWarning("in");
       return;
     }

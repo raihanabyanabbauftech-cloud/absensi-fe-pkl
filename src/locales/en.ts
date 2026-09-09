@@ -554,6 +554,9 @@ dashAttendance: {
     errors: {
       generic: "An error occurred while processing. Please try again.",
       outsideRadius: "Your location is outside the office radius.",
+      locationNotAssigned: "Location does not match your placement.",
+      tooEarly: "It is too early to check in.",
+      windowClosed: "The check-in window has closed.",
       faceMismatch: "Face does not match reference data.",
       noFaceReference: "Face reference is not available yet. Contact the admin.",
       noSchedule: "You do not have an active work schedule today.",
