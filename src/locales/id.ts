@@ -558,6 +558,7 @@ export const id = {
       noFaceReference: "Referensi wajah belum tersedia. Hubungi admin.",
       noSchedule: "Anda belum memiliki jadwal kerja aktif hari ini.",
       noClockIn: "Anda belum melakukan absen masuk hari ini.",
+      alreadyClockIn: "Anda sudah melakukan absen masuk hari ini.",
       captureRequired: "Foto wajah wajib diambil.",
     },
   },

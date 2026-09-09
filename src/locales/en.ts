@@ -558,6 +558,7 @@ dashAttendance: {
       noFaceReference: "Face reference is not available yet. Contact the admin.",
       noSchedule: "You do not have an active work schedule today.",
       noClockIn: "You have not checked in today.",
+      alreadyClockIn: "You have already checked in today.",
       captureRequired: "A face photo is required.",
     },
   },

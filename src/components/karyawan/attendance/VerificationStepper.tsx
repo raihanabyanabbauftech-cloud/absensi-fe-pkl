@@ -21,6 +21,7 @@ const ERROR_KEY_MAP: Record<string, string> = {
   NO_SCHEDULE: "verificationStepper.errors.noSchedule",
   NO_CLOCK_IN: "verificationStepper.errors.noClockIn",
   FACE_IMAGE_REQUIRED: "verificationStepper.errors.captureRequired",
+  ALREADY_CLOCKED_IN: "verificationStepper.errors.alreadyClockIn",
 };
 
 export default function VerificationStepper({ mode = "in", onClose }) {
