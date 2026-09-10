@@ -14,6 +14,8 @@ import {
 import { apiFetch, getApiToken } from "@/lib/api";
 import { useLanguage } from "@/context/LanguageContext";
 import { connectMessagesSocket } from "@/lib/socket";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const ICONS: Record<string, any> = {
   reminder: FiClock,
@@ -69,6 +71,16 @@ function getDateKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
+function getStartHour(): number {
+  try {
+    const raw = localStorage.getItem("att_schedule_start");
+    const h = parseInt((raw ?? "").split(":")[0], 10);
+    return Number.isFinite(h) ? h : 9;
+  } catch {
+    return 9;
+  }
+}
+
 function buildTodayItems(): NotificationItem[] {
   if (typeof window === "undefined") return [];
   const now = new Date();
@@ -87,17 +99,19 @@ function buildTodayItems(): NotificationItem[] {
     // ignore storage errors
   }
 
+  const startHour = getStartHour();
   const hour = now.getHours();
   const minute = now.getMinutes();
 
-  if (!hasCheckedIn && hour >= 9) {
+  if (!hasCheckedIn && (hour > startHour || (hour === startHour && minute >= 0))) {
     items.push({ id: "reminder", type: "reminder" });
   }
 
   if (checkinTime) {
     const ct = new Date(checkinTime);
     const isLate =
-      ct.getHours() > 9 || (ct.getHours() === 9 && ct.getMinutes() > 0);
+      ct.getHours() > startHour ||
+      (ct.getHours() === startHour && ct.getMinutes() > 0);
     if (isLate) {
       items.push({ id: "late", type: "late" });
     }
@@ -146,6 +160,8 @@ interface Props {
 
 export default function Notification({ dark = true, className = "" }: Props) {
   const { t, locale } = useLanguage();
+  const { data: session } = useSession();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [readIds, setReadIds] = useState<string[]>([]);
   const [serverItems, setServerItems] = useState<ServerNotification[]>([]);
@@ -278,6 +294,50 @@ export default function Notification({ dark = true, className = "" }: Props) {
   const serverIcon = (type: string) => ICONS[type] ?? FiBell;
   const serverIconStyle = (type: string) => ICON_STYLES[type] ?? DEFAULT_ICON_STYLES;
 
+  const resolvePath = (item: ServerNotification): string | null => {
+    const role = session?.user?.role;
+    const t = item.type;
+    if (t.startsWith("face_")) {
+      return role === "admin" || role === "supervisor"
+        ? t === "face_review_pending"
+          ? "/admin/settings"
+          : "/admin/karyawan"
+        : "/karyawan/settings";
+    }
+    if (
+      t === "late_clock_in" ||
+      t === "early_clock_out" ||
+      t === "missing_clock_in" ||
+      t === "missing_clock_out" ||
+      t === "reminder" ||
+      t === "attendance"
+    ) {
+      if (role === "supervisor") return "/atasan/attendance";
+      if (role === "admin" || role === "superadmin") return "/admin/kehadiran";
+      return "/karyawan/attendance";
+    }
+    if (t.startsWith("leave_")) {
+      if (role === "supervisor") return "/atasan/leave";
+      if (role === "admin" || role === "superadmin") return "/admin/perizinan";
+      return "/karyawan/leave";
+    }
+    if (t.startsWith("overtime_")) {
+      if (role === "supervisor") return "/atasan/overtime";
+      if (role === "admin" || role === "superadmin") return "/admin/lembur";
+      return "/karyawan/attendance";
+    }
+    return null;
+  };
+
+  const handleServerOpen = (item: ServerNotification) => {
+    if (!item.is_read) markServerRead(item.id);
+    const path = resolvePath(item);
+    if (path) {
+      setOpen(false);
+      router.push(path);
+    }
+  };
+
   const isEmpty = serverItems.length === 0 && items.length === 0;
 
   return (
@@ -336,9 +396,9 @@ export default function Notification({ dark = true, className = "" }: Props) {
                   key={item.id}
                   role="button"
                   tabIndex={0}
-                  onClick={() => !item.is_read && markServerRead(item.id)}
+                  onClick={() => handleServerOpen(item)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !item.is_read) markServerRead(item.id);
+                    if (e.key === "Enter") handleServerOpen(item);
                   }}
                   className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer"
                 >

@@ -65,7 +65,19 @@ export default function AttendanceAction({
   useEffect(() => {
     fetchStatus();
     getEmployeeDashboard()
-      .then((data) => setSchedule(data.current_schedule ?? null))
+      .then((data) => {
+        setSchedule(data.current_schedule ?? null);
+        try {
+          if (data.current_schedule?.start_time) {
+            localStorage.setItem(
+              "att_schedule_start",
+              data.current_schedule.start_time.slice(0, 5),
+            );
+          }
+        } catch {
+          // ignore storage errors
+        }
+      })
       .catch(() => setSchedule(null));
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
