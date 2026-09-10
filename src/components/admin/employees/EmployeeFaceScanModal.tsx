@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { FiCheck, FiX } from "react-icons/fi";
 import { useLanguage } from "@/context/LanguageContext";
 import SelfieVerification from "@/components/karyawan/attendance/SelfieVerification";
-import { registerFaceReference } from "@/lib/services/admin";
+import { registerFaceForEmployee } from "@/lib/services/face";
 
 interface Props {
   employeeId: string;
@@ -53,7 +53,7 @@ export default function EmployeeFaceScanModal({
     setSaving(true);
     setError(null);
     try {
-      await registerFaceReference({ employeeId, image: preview });
+      await registerFaceForEmployee(employeeId, preview);
       setPreview(null);
       setCapturing(false);
       setRegistered(true);

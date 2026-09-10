@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import ProfileForm from "./ProfileForm";
 import AccountSummary from "./AccountSummary";
 import SecurityForm from "./SecurityForm";
+import SelfFacePanel from "./SelfFacePanel";
 import { getMyProfile, type EmployeeProfile } from "@/lib/services/employee";
 
 interface Props {
@@ -60,6 +61,8 @@ export default function SettingsContent({
       </div>
 
       <SecurityForm />
+
+      <SelfFacePanel />
     </div>
   );
 }

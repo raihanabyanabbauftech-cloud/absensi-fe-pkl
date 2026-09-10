@@ -1321,6 +1321,18 @@ export const id = {
     registerSuccessHint: "Referensi wajah akan didaftarkan setelah Anda klik Daftarkan. Jika kamera tidak tersedia, gunakan tombol unggah gambar.",
     registeredTitle: "Wajah Terdaftar",
     registeredDesc: "Karyawan berhasil dibuat dan referensi wajah sudah didaftarkan.",
+    pendingTitle: "Menunggu Persetujuan",
+    approve: "Setujui",
+    reject: "Tolak",
+    reviewFailed: "Gagal memproses. Silakan coba lagi.",
+  },
+
+  selfFace: {
+    title: "Daftar Wajah (Self-Service)",
+    desc: "Foto wajah Anda kirim ke admin untuk diverifikasi sebelum dipakai absensi.",
+    submit: "Kirim untuk Persetujuan",
+    pendingNotif: "Foto wajah Anda sedang menunggu persetujuan admin. Belum bisa dipakai absensi sampai disetujui.",
+    doneNotif: "Admin akan meninjau foto Anda. Anda mendapat notifikasi begitu disetujui atau ditolak.",
   },
 
   adminDepartments: {

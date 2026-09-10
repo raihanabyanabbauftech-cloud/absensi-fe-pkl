@@ -1322,6 +1322,18 @@ adminEmployeeForm: {
     registerSuccessHint: "The face reference will be registered after you click Register. If the camera is unavailable, use the upload image button.",
     registeredTitle: "Face Registered",
     registeredDesc: "Employee created and face reference registered.",
+    pendingTitle: "Pending Approval",
+    approve: "Approve",
+    reject: "Reject",
+    reviewFailed: "Failed to process. Please try again.",
+  },
+
+  selfFace: {
+    title: "Face Registration (Self-Service)",
+    desc: "Send your face photo to the admin for verification before it can be used for attendance.",
+    submit: "Send for Approval",
+    pendingNotif: "Your face photo is waiting for admin approval. It cannot be used for attendance until approved.",
+    doneNotif: "An admin will review your photo. You will be notified once it is approved or rejected.",
   },
 
   adminDepartments: {

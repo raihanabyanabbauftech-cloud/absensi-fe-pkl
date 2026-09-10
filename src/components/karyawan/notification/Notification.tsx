@@ -9,6 +9,7 @@ import {
   FiAlertCircle,
   FiCheckCircle,
   FiXCircle,
+  FiUserCheck,
 } from "react-icons/fi";
 import { apiFetch } from "@/lib/api";
 import { useLanguage } from "@/context/LanguageContext";
@@ -22,6 +23,9 @@ const ICONS: Record<string, any> = {
   missing_clock_in: FiAlertCircle,
   missing_clock_out: FiAlertCircle,
   late_clock_in: FiAlertCircle,
+  face_review_pending: FiUserCheck,
+  face_approved: FiCheckCircle,
+  face_rejected: FiXCircle,
 };
 
 const ICON_STYLES: Record<string, string> = {
@@ -34,6 +38,11 @@ const ICON_STYLES: Record<string, string> = {
   missing_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
   missing_clock_out: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
   late_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+  face_review_pending:
+    "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+  face_approved:
+    "bg-green-50 text-green-600 dark:bg-green-500/20 dark:text-green-400",
+  face_rejected: "bg-red-50 text-red-600 dark:bg-red-500/20 dark:text-red-400",
 };
 
 const DEFAULT_ICON_STYLES =
