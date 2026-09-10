@@ -12,6 +12,18 @@ export interface AttendanceRecord {
   employee_name?: string | null;
 }
 
+export interface AssignedOfficeLocation {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  radius_meters: number;
+}
+
+export async function getMyLocations(): Promise<AssignedOfficeLocation[]> {
+  return apiFetch<AssignedOfficeLocation[]>("/attendance/locations");
+}
+
 export async function getMyAttendance(): Promise<AttendanceRecord[]> {
   return apiFetch<AttendanceRecord[]>("/attendance/me");
 }

@@ -54,7 +54,12 @@ export default function SelfFacePanel() {
       setPending(true);
       reset();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("adminFace.failed"));
+      if (err instanceof Error && "code" in err && err.code === "FACE_PENDING_REVIEW") {
+        setPending(true);
+        reset();
+      } else {
+        setError(err instanceof Error ? err.message : t("adminFace.failed"));
+      }
     } finally {
       setSaving(false);
     }

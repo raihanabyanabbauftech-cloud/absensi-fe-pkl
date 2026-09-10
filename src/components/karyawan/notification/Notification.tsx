@@ -11,8 +11,9 @@ import {
   FiXCircle,
   FiUserCheck,
 } from "react-icons/fi";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, getApiToken } from "@/lib/api";
 import { useLanguage } from "@/context/LanguageContext";
+import { connectMessagesSocket } from "@/lib/socket";
 
 const ICONS: Record<string, any> = {
   reminder: FiClock,
@@ -192,12 +193,44 @@ export default function Notification({ dark = true, className = "" }: Props) {
   }, [open]);
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
+    let cancelled = false;
+
+    const load = () =>
       apiFetch<ServerNotification[]>("/notifications/me")
-        .then(setServerItems)
+        .then((items) => {
+          if (!cancelled) setServerItems(items);
+        })
         .catch(() => {});
-    }, 60_000);
-    return () => window.clearInterval(interval);
+
+    load();
+
+    const interval = window.setInterval(load, 15_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let socket: ReturnType<typeof connectMessagesSocket> | null = null;
+
+    (async () => {
+      const token = await getApiToken();
+      if (!token || cancelled) return;
+      socket = connectMessagesSocket(token);
+      socket.on("notification:new", () => {
+        if (cancelled) return;
+        apiFetch<ServerNotification[]>("/notifications/me")
+          .then(setServerItems)
+          .catch(() => {});
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      socket?.off("notification:new");
+    };
   }, []);
 
   const unreadServer = serverItems.filter((i) => !i.is_read).length;
