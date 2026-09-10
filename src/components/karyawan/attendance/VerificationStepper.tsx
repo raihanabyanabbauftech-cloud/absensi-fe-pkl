@@ -25,11 +25,13 @@ const ERROR_KEY_MAP: Record<string, string> = {
   ALREADY_CLOCKED_IN: "verificationStepper.errors.alreadyClockIn",
   TOO_EARLY: "verificationStepper.errors.tooEarly",
   WINDOW_CLOSED: "verificationStepper.errors.windowClosed",
+  REASON_REQUIRED: "verificationStepper.errors.reasonRequired",
 };
 
 export default function VerificationStepper({ mode = "in", onClose }) {
   const [step, setStep] = useState(1);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [gpsReason, setGpsReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<AttendanceResult | null>(null);
@@ -38,8 +40,9 @@ export default function VerificationStepper({ mode = "in", onClose }) {
   const title = mode === "in" ? t("verificationStepper.checkIn") : t("verificationStepper.checkOut");
   const endpoint = mode === "in" ? "/attendance/clock-in" : "/attendance/clock-out";
 
-  const handleGpsNext = (nextCoords: { lat: number; lng: number }) => {
+  const handleGpsNext = (nextCoords: { lat: number; lng: number }, gpsReason?: string) => {
     setCoords(nextCoords);
+    setGpsReason(gpsReason ?? "");
     setStep(2);
   };
 
@@ -50,7 +53,12 @@ export default function VerificationStepper({ mode = "in", onClose }) {
     try {
       const data = await apiFetch<AttendanceResult>(endpoint, {
         method: "POST",
-        body: JSON.stringify({ lat: coords.lat, lng: coords.lng, face_image: imageData }),
+        body: JSON.stringify({
+          lat: coords.lat,
+          lng: coords.lng,
+          face_image: imageData,
+          ...(mode === "out" && gpsReason ? { reason: gpsReason } : {}),
+        }),
       });
       setResult(data);
       setStep(3);
@@ -96,7 +104,7 @@ export default function VerificationStepper({ mode = "in", onClose }) {
         </div>
 
         <div className="px-6 pb-6 pt-2">
-          {step === 1 && <GPSVerification onNext={handleGpsNext} />}
+          {step === 1 && <GPSVerification mode={mode as "in" | "out"} onNext={handleGpsNext} />}
 
           {step === 2 && !submitting && <SelfieVerification onNext={handleSelfieNext} />}
 

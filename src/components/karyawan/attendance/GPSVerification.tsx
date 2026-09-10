@@ -8,10 +8,16 @@ import {
 } from "@/lib/services/attendance";
 
 interface GPSVerificationProps {
-  onNext: (coords: { lat: number; lng: number }) => void;
+  mode: "in" | "out";
+  onNext: (
+    coords: { lat: number; lng: number },
+    reason?: string,
+  ) => void;
 }
 
 type GpsStatus = "loading" | "success" | "outside" | "noLocations" | "error";
+
+const EMERGENCY_CLOCK_OUT_MAX_METERS = 20_000;
 
 function getDistanceMeters(
   lat1: number,
@@ -31,7 +37,7 @@ function getDistanceMeters(
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-export default function GPSVerification({ onNext }: GPSVerificationProps) {
+export default function GPSVerification({ mode, onNext }: GPSVerificationProps) {
   const { t } = useLanguage();
   const [status, setStatus] = useState<GpsStatus>("loading");
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
@@ -39,6 +45,7 @@ export default function GPSVerification({ onNext }: GPSVerificationProps) {
     location: AssignedOfficeLocation;
     distance: number;
   } | null>(null);
+  const [emergencyReason, setEmergencyReason] = useState("");
   const locationsRef = useRef<AssignedOfficeLocation[]>([]);
 
   const resolveToNearest = (
@@ -69,6 +76,10 @@ export default function GPSVerification({ onNext }: GPSVerificationProps) {
   const resolveCurrentPosition = (locs: AssignedOfficeLocation[]) => {
     if (!locs.length) {
       setStatus("noLocations");
+      return;
+    }
+    if (!navigator.geolocation) {
+      setStatus("error");
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -122,6 +133,12 @@ export default function GPSVerification({ onNext }: GPSVerificationProps) {
 
   const nearestLabel = nearest?.location.name ?? "";
   const nearestDistance = nearest ? Math.round(nearest.distance) : 0;
+  const canEmergency =
+    mode === "out" &&
+    nearest &&
+    nearest.distance <= EMERGENCY_CLOCK_OUT_MAX_METERS;
+  const canProceedEmergency =
+    canEmergency && emergencyReason.trim().length > 0;
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -191,7 +208,7 @@ export default function GPSVerification({ onNext }: GPSVerificationProps) {
         </>
       )}
 
-      {status === "outside" && (
+      {status === "outside" && mode === "in" && (
         <>
           <h3 className="font-bold text-amber-600 dark:text-amber-400 text-lg mb-2">{t("gpsVerification.outsideTitle")}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-1 max-w-xs">{t("gpsVerification.outsideDesc")}</p>
@@ -199,6 +216,61 @@ export default function GPSVerification({ onNext }: GPSVerificationProps) {
             <p className="text-xs text-gray-400 mb-4">
               {t("gpsVerification.distanceLabel")}: {nearestDistance} m{" "}
               <span className="text-amber-500">(max {nearest.location.radius_meters} m)</span>
+            </p>
+          )}
+          <button
+            onClick={verify}
+            className="w-full bg-linear-to-r from-[#1E3A5F] to-[#4F46E5] text-white font-semibold text-sm py-3.5 rounded-xl hover:brightness-110 transition-all shadow-md shadow-blue-900/20"
+          >
+            {t("gpsVerification.retry")}
+          </button>
+        </>
+      )}
+
+      {status === "outside" && mode === "out" && canEmergency && (
+        <>
+          <h3 className="font-bold text-amber-600 dark:text-amber-400 text-lg mb-2">
+            {t("gpsVerification.emergencyTitle")}
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-3 max-w-xs">
+            {t("gpsVerification.emergencyDesc")}
+          </p>
+          {nearest && (
+            <p className="text-xs text-gray-400 mb-3">
+              {t("gpsVerification.distanceLabel")}: {nearestDistance} m
+            </p>
+          )}
+          <textarea
+            value={emergencyReason}
+            onChange={(e) => setEmergencyReason(e.target.value)}
+            maxLength={500}
+            rows={3}
+            placeholder={t("gpsVerification.reasonPlaceholder")}
+            className="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none mb-3"
+          />
+          <button
+            disabled={!canProceedEmergency}
+            onClick={() => coords && onNext(coords, emergencyReason.trim())}
+            className="w-full bg-linear-to-r from-[#1E3A5F] to-[#4F46E5] text-white font-semibold text-sm py-3.5 rounded-xl hover:brightness-110 transition-all shadow-md shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {t("gpsVerification.continue")}
+          </button>
+          <p className="text-xs text-gray-400 mt-3">
+            {t("gpsVerification.emergencyNote")}
+          </p>
+        </>
+      )}
+
+      {status === "outside" && mode === "out" && !canEmergency && (
+        <>
+          <h3 className="font-bold text-amber-600 dark:text-amber-400 text-lg mb-2">{t("gpsVerification.outsideTitle")}</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-1 max-w-xs">
+            {t("gpsVerification.tooFarDesc")}
+          </p>
+          {nearest && (
+            <p className="text-xs text-gray-400 mb-4">
+              {t("gpsVerification.distanceLabel")}: {nearestDistance} m{" "}
+              <span className="text-red-500">(max {EMERGENCY_CLOCK_OUT_MAX_METERS} m)</span>
             </p>
           )}
           <button

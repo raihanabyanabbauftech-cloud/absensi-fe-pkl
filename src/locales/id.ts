@@ -537,6 +537,11 @@ export const id = {
     noLocations: "Anda belum memiliki penempatan kantor. Hubungi admin untuk mengatur jadwal kerja.",
     retry: "Coba Lagi",
     errorDesc: "Pastikan izin lokasi aktif, lalu coba lagi.",
+    emergencyTitle: "Clock Out Darurat",
+    emergencyDesc: "Anda berada di luar area kantor. Isi alasan untuk clock out darurat, lalu lanjutkan dengan verifikasi wajah.",
+    reasonPlaceholder: "Tuliskan alasan clock out dari luar area...",
+    emergencyNote: "Clock out darurat tercatat dan akan diberitahukan ke admin/supervisor. Foto wajah tetap wajib.",
+    tooFarDesc: "Lokasi Anda terlalu jauh dari kantor untuk clock out darurat.",
   },
 
   selfieVerification: {
@@ -568,6 +573,7 @@ export const id = {
       locationNotAssigned: "Lokasi tidak sesuai dengan penempatan Anda.",
       tooEarly: "Belum waktunya absen.",
       windowClosed: "Jendela absen sudah tutup.",
+      reasonRequired: "Wajib mengisi alasan untuk clock out darurat.",
       faceMismatch: "Wajah tidak cocok dengan data referensi.",
       noFaceReference: "Referensi wajah belum tersedia. Hubungi admin.",
       noSchedule: "Anda belum memiliki jadwal kerja aktif hari ini.",

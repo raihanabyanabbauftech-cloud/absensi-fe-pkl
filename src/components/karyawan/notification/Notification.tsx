@@ -24,6 +24,7 @@ const ICONS: Record<string, any> = {
   missing_clock_in: FiAlertCircle,
   missing_clock_out: FiAlertCircle,
   late_clock_in: FiAlertCircle,
+  early_clock_out: FiAlertCircle,
   face_review_pending: FiUserCheck,
   face_approved: FiCheckCircle,
   face_rejected: FiXCircle,
@@ -39,6 +40,7 @@ const ICON_STYLES: Record<string, string> = {
   missing_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
   missing_clock_out: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
   late_clock_in: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+  early_clock_out: "bg-red-50 text-red-600 dark:bg-red-500/20 dark:text-red-400",
   face_review_pending:
     "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
   face_approved:

@@ -537,6 +537,11 @@ dashAttendance: {
     noLocations: "You do not have an assigned office yet. Ask your admin to set up your work schedule.",
     retry: "Try Again",
     errorDesc: "Make sure location permission is enabled, then try again.",
+    emergencyTitle: "Emergency Clock Out",
+    emergencyDesc: "You are outside the office area. Fill in a reason for emergency clock out, then continue with face verification.",
+    reasonPlaceholder: "Write the reason for clocking out from outside the area...",
+    emergencyNote: "Emergency clock out is recorded and notified to admin/supervisor. Face verification is still required.",
+    tooFarDesc: "Your location is too far from the office for an emergency clock out.",
   },
 
   selfieVerification: {
@@ -568,6 +573,7 @@ dashAttendance: {
       locationNotAssigned: "Location does not match your placement.",
       tooEarly: "It is too early to check in.",
       windowClosed: "The check-in window has closed.",
+      reasonRequired: "A reason is required for emergency clock out.",
       faceMismatch: "Face does not match reference data.",
       noFaceReference: "Face reference is not available yet. Contact the admin.",
       noSchedule: "You do not have an active work schedule today.",
