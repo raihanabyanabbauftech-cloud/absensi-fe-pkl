@@ -30,6 +30,19 @@ export function registerSelfFace(
   });
 }
 
+export interface SelfFaceStatus {
+  daily_used: number;
+  daily_limit: number;
+  remaining: number;
+  has_pending: boolean;
+  has_active: boolean;
+  can_submit: boolean;
+}
+
+export function getSelfFaceStatus(): Promise<SelfFaceStatus> {
+  return apiFetch<SelfFaceStatus>("/face-recognition/register/status");
+}
+
 export function registerFaceForEmployee(
   employeeId: string,
   image: string,

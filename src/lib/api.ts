@@ -40,16 +40,19 @@ interface ApiResponse<T> {
   error?: {
     code: string;
     message: string;
+    detail?: Record<string, unknown>;
   };
 }
 
 export     class ApiError extends Error {
   code: string;
+  detail?: Record<string, unknown>;
 
-  constructor(code: string, message: string) {
+  constructor(code: string, message: string, detail?: Record<string, unknown>) {
     super(message);
     this.name = "ApiError";
     this.code = code;
+    this.detail = detail;
   }
 }
 
@@ -103,6 +106,7 @@ export async function apiFetch<T>(
       json?.error?.code || "UNKNOWN_ERROR",
       json?.error?.message ||
         `Server returned HTTP ${response.status}. Check that the endpoint exists and the backend is running.`,
+      json?.error?.detail,
     );
   }
 

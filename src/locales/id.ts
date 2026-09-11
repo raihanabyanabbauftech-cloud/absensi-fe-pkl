@@ -1350,6 +1350,9 @@ export const id = {
     submit: "Kirim untuk Persetujuan",
     pendingNotif: "Foto wajah Anda sedang menunggu persetujuan admin. Belum bisa dipakai absensi sampai disetujui.",
     doneNotif: "Admin akan meninjau foto Anda. Anda mendapat notifikasi begitu disetujui atau ditolak.",
+    activeNotif: "Wajah Anda sudah terdaftar & aktif untuk absensi.",
+    remaining: "Sisa percobaan hari ini: {count} dari {limit}.",
+    limitReached: "Batas percobaan hari ini sudah habis ({limit}x). Coba lagi besok. Butuh wajah sekarang? Hubungi admin.",
   },
 
   adminDepartments: {

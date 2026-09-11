@@ -1351,6 +1351,9 @@ adminEmployeeForm: {
     submit: "Send for Approval",
     pendingNotif: "Your face photo is waiting for admin approval. It cannot be used for attendance until approved.",
     doneNotif: "An admin will review your photo. You will be notified once it is approved or rejected.",
+    activeNotif: "Your face is already registered & active for attendance.",
+    remaining: "Attempts left today: {count} of {limit}.",
+    limitReached: "Daily attempt limit reached ({limit}x). Try again tomorrow. Need your face now? Contact an admin.",
   },
 
   adminDepartments: {

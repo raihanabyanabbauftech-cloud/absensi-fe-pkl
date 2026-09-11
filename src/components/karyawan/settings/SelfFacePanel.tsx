@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { FiCheck, FiClock, FiCamera, FiUpload } from "react-icons/fi";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FiCheck, FiClock, FiCamera, FiUpload, FiAlertTriangle } from "react-icons/fi";
 import { useSession } from "next-auth/react";
 import { useLanguage } from "@/context/LanguageContext";
+import { ApiError } from "@/lib/api";
 import SelfieVerification from "@/components/karyawan/attendance/SelfieVerification";
-import { registerSelfFace } from "@/lib/services/face";
+import { registerSelfFace, getSelfFaceStatus, SelfFaceStatus } from "@/lib/services/face";
 
 export default function SelfFacePanel() {
   const { t } = useLanguage();
@@ -15,9 +16,22 @@ export default function SelfFacePanel() {
   const [capturing, setCapturing] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<SelfFaceStatus | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const refreshStatus = useCallback(async () => {
+    try {
+      const s = await getSelfFaceStatus();
+      setStatus(s);
+    } catch {
+      setStatus(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshStatus();
+  }, [refreshStatus]);
 
   const handleCapture = (dataUrl: string) => {
     setPreview(dataUrl);
@@ -51,12 +65,16 @@ export default function SelfFacePanel() {
     setError(null);
     try {
       await registerSelfFace(employeeId, preview);
-      setPending(true);
       reset();
+      refreshStatus();
     } catch (err) {
-      if (err instanceof Error && "code" in err && err.code === "FACE_PENDING_REVIEW") {
-        setPending(true);
+      if (err instanceof ApiError && err.code === "FACE_PENDING_REVIEW") {
         reset();
+        refreshStatus();
+      } else if (err instanceof ApiError && err.code === "FACE_DAILY_LIMIT_EXCEEDED") {
+        setError(t("selfFace.limitReached", { limit: status?.daily_limit ?? 3 }));
+        reset();
+        refreshStatus();
       } else {
         setError(err instanceof Error ? err.message : t("adminFace.failed"));
       }
@@ -64,6 +82,10 @@ export default function SelfFacePanel() {
       setSaving(false);
     }
   };
+
+  const hasPending = status?.has_pending ?? false;
+  const hasActive = status?.has_active ?? false;
+  const limitReached = !status?.can_submit;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6">
@@ -74,10 +96,17 @@ export default function SelfFacePanel() {
         {t("selfFace.desc")}
       </p>
 
-      {pending && (
+      {hasPending && (
         <div className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-500/10 text-xs text-amber-700 dark:text-amber-400 rounded-lg flex items-center gap-2">
           <FiClock size={14} className="shrink-0" />
           {t("selfFace.pendingNotif")}
+        </div>
+      )}
+
+      {!hasPending && !hasActive && limitReached && (
+        <div className="mb-4 px-4 py-3 bg-red-50 dark:bg-red-500/10 text-xs text-red-600 dark:text-red-400 rounded-lg flex items-center gap-2">
+          <FiAlertTriangle size={14} className="shrink-0" />
+          {t("selfFace.limitReached", { limit: status?.daily_limit ?? 3 })}
         </div>
       )}
 
@@ -87,7 +116,13 @@ export default function SelfFacePanel() {
         </div>
       )}
 
-      {!pending ? (
+      {!hasPending && !hasActive && !limitReached && status && (
+        <div className="mb-4 px-4 py-2 bg-blue-50 dark:bg-blue-500/10 text-xs text-blue-700 dark:text-blue-400 rounded-lg">
+          {t("selfFace.remaining", { count: status.remaining, limit: status.daily_limit })}
+        </div>
+      )}
+
+      {!hasPending && !hasActive && !limitReached ? (
         <div className="space-y-4">
           {capturing ? (
             <SelfieVerification onNext={handleCapture} />
@@ -142,12 +177,12 @@ export default function SelfFacePanel() {
             </button>
           )}
         </div>
-      ) : (
+      ) : hasActive || hasPending ? (
         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
           <FiCheck size={15} className="text-green-600 dark:text-green-400 shrink-0" />
-          {t("selfFace.doneNotif")}
+          {hasActive ? t("selfFace.activeNotif") : t("selfFace.doneNotif")}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
